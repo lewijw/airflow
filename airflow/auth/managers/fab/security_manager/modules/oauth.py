@@ -128,6 +128,17 @@ class FabAirflowSecurityManagerOverrideOauth:
                 "last_name": data.get("family_name", ""),
                 "email": data.get("email", ""),
             }
+        # for SAS Viya
+        if provider == "SAS":
+            me = self.appbuilder.sm.oauth_remotes[provider].get('userinfo')
+            data = me.json()
+            log.debug("User info from SAS: %s", data)
+            return {
+                'username': 'SAS_' + data['user_name'],
+                'first_name': data.get('given_name', ''),
+                'last_name': data.get('family_name', ''),
+                'email': data.get('email', ''),
+            }
         else:
             return {}
 
